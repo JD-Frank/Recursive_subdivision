@@ -1,6 +1,7 @@
 int margin = 20;
 int pGenerations = 3;
 int oGenerations = 3;
+int seed = round(random(1000000));
 ArrayList<Cell> cells = new ArrayList<Cell>();
 ArrayList<Cell> offspring = new ArrayList<Cell>();
 
@@ -10,7 +11,7 @@ PVector a,b,c,d,e,f;
 
 void settings(){
   size(800, 800);
-  randomSeed(10);
+  randomSeed(seed);
 
   a = new PVector(margin, margin);
   b = new PVector(width - margin, margin);
@@ -25,8 +26,7 @@ void settings(){
 
   subdivide(oGenerations, offspring, "parent");
 
-  printCoords(cells);
-  printCoords(offspring);
+  println(seed);
 }
 
 void draw(){
@@ -80,7 +80,7 @@ void  displayOffspring(){
     int dir = cells.get(i).dir;
     int reps = (int) cells.get(i).partitions;
     for(int rep = 0; rep < reps; rep++){
-      
+
       pushMatrix();
       if(dir == 0){
         translate(cell.w*rep, 0);

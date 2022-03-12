@@ -2,11 +2,12 @@ public class Cell{
   PVector a, b, c, d, e, f;
   float w, h;
   int dir;
+  float squareness;
   float partitions = 4;
   float splitDist;
   String splitMode;
   ArrayList<Cell> offspring = new ArrayList<Cell>();
-  color colour = color(random(255), random(255), random(255), random(255));
+  color colour = indigo[round(random(4))];
 
   Cell(PVector a_, PVector b_, PVector c_, PVector d_){
     a = a_;
@@ -16,10 +17,11 @@ public class Cell{
     splitMode = "parent";
     w = abs(PVector.dist(a,b));
     h = abs(PVector.dist(a,d));
-
+    squareness = w/h;
     setDir();
   }
 
+// Display a cell according to teh display mode dispMode
   void display(String dispMode){
     switch(dispMode){
       case"parent":
@@ -47,14 +49,22 @@ public class Cell{
 
   // Set the splitting direction
   void setDir(){
-    dir = round(random(1));
+    if(squareness > 1 ){
+      dir = 0;
+    }
+    if(squareness < 1 ){
+      dir = 1;
+    }
+    if(squareness == 1 ){
+      dir = round(random(1));
+    }
   }
 
   // Set the splitting distance
   void setSplitDist(){
     switch(splitMode){
       case "parent":
-        splitDist = random(1);
+        splitDist = random(0.25, 0.75);
         break;
       case "offspring":
         splitDist = 1/partitions;
@@ -101,6 +111,7 @@ public class Cell{
     }
   }
 
+  // Recursiveley display all the descendance of the cell
   void displayOffspring(){
     for(Cell cell : offspring){
 
