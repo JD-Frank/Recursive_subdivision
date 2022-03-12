@@ -1,11 +1,16 @@
 int margin = 20;
+int pGenerations = 3;
+int oGenerations = 2;
 ArrayList<Cell> cells = new ArrayList<Cell>();
-ArrayList<Cell> children = new ArrayList<Cell>();
+ArrayList<Cell> offspring = new ArrayList<Cell>();
+
+
+
 PVector a,b,c,d,e,f;
-int parentGens = 3;
 
 void settings(){
   size(800, 800);
+  randomSeed(10);
 
   a = new PVector(margin, margin);
   b = new PVector(width - margin, margin);
@@ -14,62 +19,53 @@ void settings(){
 
   cells.add(new Cell(a,b,c,d));
 
-  for (int gen = 0; gen < parentGens; gen++){
-    cells = splitCells(cells);
-  }
+  cells = subdivide(pGenerations, cells, "parent");
 
+  offspring = subdivide(1, cells, "offspring");
+
+  printCoords(cells);
+  printCoords(offspring);
 }
 
 void draw(){
+
   for(Cell cell : cells){
     cell.display();
   }
+  fill(#004488, 100);
+  for(Cell cell : offspring){
+    cell.display();
+  }
+  noLoop();
 }
 
-ArrayList<Cell> splitCells(ArrayList<Cell> cells_){
-  ArrayList<Cell> temp = new ArrayList<Cell>();
-
-  for(Cell cell : cells_){
-    PVector a = cell.a.copy();
-    PVector b = cell.b.copy();
-    PVector c = cell.c.copy();
-    PVector d = cell.d.copy();
-    PVector e = cell.e.copy();
-    PVector f = cell.f.copy();
-    switch(cell.dir){
-      case 0:
-        temp.add(new Cell(a, e, f, d));
-        temp.add(new Cell(e, b, c, f));
-        break;
-      case 1:
-        temp.add(new Cell(a, b, e, f));
-        temp.add(new Cell(f, e, c, d));
-        break;
+ArrayList<Cell> subdivide(int generations, ArrayList<Cell> cellArray, String mode){
+  for (int gen = 0; gen < generations; gen++){
+    ArrayList<Cell> accumulator = new ArrayList<Cell>();
+    for(Cell cell : cellArray){
+        cell.setSplitMode(mode);
+        cell.createOffspring();{
+        for(int i = 0; i < cell.offspring.size(); i++)
+        accumulator.add(cell.offspring.get(i));
+        }
     }
+    cellArray = accumulator;
   }
-  return temp;
+  return cellArray;
 }
 
-void getChildren(){
-  ArrayList<Cell> temp = new ArrayList<Cell>();
-  for(Cell cell : cells){
-    PVector a = cell.a.copy();
-    PVector b = cell.b.copy();
-    PVector c = cell.c.copy();
-    PVector d = cell.d.copy();
-    PVector e = cell.e.copy();
-    PVector f = cell.f.copy();
-
-    cell.setSplitMode("child");
-    cell.setsplitDist();
-    switch(cell.dir){
-      case 0:
-        temp.add(new Cell(a, e, f, d));
-        break;
-      case 1:
-        temp.add(new Cell(a, b, e, f));
-        break;
+void printCoords(ArrayList<Cell> cellArray){
+  for(Cell cell : cellArray){
+    print("--------------------\r\n");
+    print(cell.a.x + " , " + cell.a.y + "\r\n");
+    print(cell.b.x + " , " + cell.b.y + "\r\n");
+    print(cell.c.x + " , " + cell.c.y + "\r\n");
+    print(cell.d.x + " , " + cell.d.y + "\r\n");
+    print("w: " + cell.w + " h: " + cell.h +  " dist: " + cell.splitDist +"\r\n");
+    try{
+    print(cell.e.x + " , " + cell.e.y + "\r\n");
+    print(cell.f.x + " , " + cell.f.y + "\r\n");
     }
+    catch(Exception e){}
   }
-  children = temp;
 }
