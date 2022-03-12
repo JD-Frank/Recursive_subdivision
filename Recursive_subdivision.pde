@@ -1,6 +1,6 @@
 int margin = 20;
 int pGenerations = 3;
-int oGenerations = 2;
+int oGenerations = 3;
 ArrayList<Cell> cells = new ArrayList<Cell>();
 ArrayList<Cell> offspring = new ArrayList<Cell>();
 
@@ -23,19 +23,22 @@ void settings(){
 
   offspring = subdivide(1, cells, "offspring");
 
+  subdivide(oGenerations, offspring, "parent");
+
   printCoords(cells);
   printCoords(offspring);
 }
 
 void draw(){
 
-  for(Cell cell : cells){
-    cell.display();
-  }
-  fill(#004488, 100);
-  for(Cell cell : offspring){
-    cell.display();
-  }
+
+   displayOffspring();
+
+   for(Cell cell : cells){
+     cell.display("parent");
+   }
+
+
   noLoop();
 }
 
@@ -67,5 +70,26 @@ void printCoords(ArrayList<Cell> cellArray){
     print(cell.f.x + " , " + cell.f.y + "\r\n");
     }
     catch(Exception e){}
+  }
+}
+
+void  displayOffspring(){
+  for(Cell cell : offspring){
+    fill(random(255), random(255), random(255), 100);
+    int i = offspring.indexOf(cell);
+    int dir = cells.get(i).dir;
+    int reps = (int) cells.get(i).partitions;
+    for(int rep = 0; rep < reps; rep++){
+      
+      pushMatrix();
+      if(dir == 0){
+        translate(cell.w*rep, 0);
+      }
+      if(dir == 1){
+        translate(0, cell.h*rep);
+      }
+      cell.displayOffspring();
+      popMatrix();
+    }
   }
 }

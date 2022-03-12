@@ -6,6 +6,7 @@ public class Cell{
   float splitDist;
   String splitMode;
   ArrayList<Cell> offspring = new ArrayList<Cell>();
+  color colour = color(random(255), random(255), random(255), random(255));
 
   Cell(PVector a_, PVector b_, PVector c_, PVector d_){
     a = a_;
@@ -19,14 +20,29 @@ public class Cell{
     setDir();
   }
 
-  void display(){
-    strokeWeight(3);
-    beginShape();
-    vertex(a.x, a.y);
-    vertex(b.x, b.y);
-    vertex(c.x, c.y);
-    vertex(d.x, d.y);
-    endShape(CLOSE);
+  void display(String dispMode){
+    switch(dispMode){
+      case"parent":
+        noFill();
+        strokeWeight(3);
+        beginShape();
+        vertex(a.x, a.y);
+        vertex(b.x, b.y);
+        vertex(c.x, c.y);
+        vertex(d.x, d.y);
+        endShape(CLOSE);
+        break;
+      case"offspring":
+        fill(colour);
+        strokeWeight(1);
+        beginShape();
+        vertex(a.x, a.y);
+        vertex(b.x, b.y);
+        vertex(c.x, c.y);
+        vertex(d.x, d.y);
+        endShape(CLOSE);
+        break;
+    }
   }
 
   // Set the splitting direction
@@ -65,6 +81,7 @@ public class Cell{
     splitMode = mode;
   }
 
+  // Create the cells offspring according to the splitmode, distance and direction
   void createOffspring(){
     setSplitDist();
     splitPoints();
@@ -81,6 +98,18 @@ public class Cell{
           offspring.add(new Cell(f.copy(), e.copy(), c.copy(), d.copy()));
         }
         break;
+    }
+  }
+
+  void displayOffspring(){
+    for(Cell cell : offspring){
+
+      cell.display("offspring");
+      try{
+
+        cell.displayOffspring();
+      }
+      catch(Exception e){}
     }
   }
 }
