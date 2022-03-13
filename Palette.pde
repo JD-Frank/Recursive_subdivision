@@ -1,1 +1,11 @@
 color[] indigo = {#264653, #2A9D8F, #E9C46A, #F4A261, #E76F51};
+color[] greens = {#CAD2C5, #84A98C, #52796F, #354F52, #2F3E46};
+color[] autumn = {#F6AA1C, #BC3908, #941B0C, #621708, #220901};
+color[] mediterranian = {#000000,#14213d,#fca311,#e5e5e5,#ffffff};
+color[] pastel = {#233D4D, #FE7F2D, #FCCA46, #A1C181, #619B8A};
+color[] obama = {#001427, #708D81, #F4D58D, #BF0603, #8D0801};
+color[] popsicle = {#011627, #FDFFFC, #2EC4B6, #E71D36, #FF9F1C};
+color[] divergent = {#001524, #15616D, #FFECD1, #FF7D00, #78290F};
+color[] sadCircus = {#335C67, #FFF3B0, #E09F3E, #9E2A2B, #540B0E};
+color[] slurpee = {#780000, #C1121F, #FDF0D5, #003049, #669BBC};
+color[] burgers = {#003049, #D62828, #F77F00, #FCBF49, #EAE2B7};

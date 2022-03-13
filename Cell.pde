@@ -26,7 +26,8 @@ public class Cell{
     switch(dispMode){
       case"parent":
         noFill();
-        strokeWeight(3);
+        stroke(#FFFFFF);
+        strokeWeight(6);
         beginShape();
         vertex(a.x, a.y);
         vertex(b.x, b.y);
@@ -36,7 +37,8 @@ public class Cell{
         break;
       case"offspring":
         fill(colour);
-        strokeWeight(1);
+        stroke(#FFFFFF);
+        strokeWeight(2);
         beginShape();
         vertex(a.x, a.y);
         vertex(b.x, b.y);

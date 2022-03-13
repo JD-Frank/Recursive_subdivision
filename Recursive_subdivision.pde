@@ -2,6 +2,7 @@ int margin = 20;
 int pGenerations = 3;
 int oGenerations = 3;
 int seed = round(random(1000000));
+float hatchSep;
 ArrayList<Cell> cells = new ArrayList<Cell>();
 ArrayList<Cell> offspring = new ArrayList<Cell>();
 
@@ -31,12 +32,27 @@ void settings(){
 
 void draw(){
 
+  background(#FFFFFF);
 
-   displayOffspring();
 
-   for(Cell cell : cells){
-     cell.display("parent");
-   }
+
+  displayOffspring();
+
+  for(Cell cell : cells){
+   cell.display("parent");
+  }
+
+  hatchSep = height*0.005;
+  for(int i = 0; i < 2*height; i+=hatchSep){
+    strokeWeight(2);
+    stroke(#FFFFFF);
+    pushMatrix();
+    rotate(-PI/4.0);
+    translate(0,i);
+    line(-width,0,width,0);
+    popMatrix();
+  }
+
 
 
   noLoop();
