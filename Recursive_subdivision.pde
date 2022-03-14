@@ -1,3 +1,6 @@
+import processing.pdf.*;
+import processing.svg.*;
+
 int margin = 20;
 int pGenerations = 3;
 int oGenerations = 3;
@@ -11,7 +14,7 @@ ArrayList<Cell> offspring = new ArrayList<Cell>();
 PVector a,b,c,d,e,f;
 
 void settings(){
-  size(800, 800);
+  size(1080, 1080, PDF, str(seed)+".pdf");
   randomSeed(seed);
 
   a = new PVector(margin, margin);
@@ -42,20 +45,12 @@ void draw(){
    cell.display("parent");
   }
 
-  hatchSep = height*0.005;
-  for(int i = 0; i < 2*height; i+=hatchSep){
-    strokeWeight(2);
-    stroke(#FFFFFF);
-    pushMatrix();
-    rotate(-PI/4.0);
-    translate(0,i);
-    line(-width,0,width,0);
-    popMatrix();
-  }
+  //hatch();
 
 
 
   noLoop();
+  exit();
 }
 
 ArrayList<Cell> subdivide(int generations, ArrayList<Cell> cellArray, String mode){
@@ -107,5 +102,18 @@ void  displayOffspring(){
       cell.displayOffspring();
       popMatrix();
     }
+  }
+}
+
+void hatch(){
+  hatchSep = height*0.005;
+  for(int i = 0; i < 2*height; i+=hatchSep){
+    strokeWeight(2);
+    stroke(#FFFFFF);
+    pushMatrix();
+    rotate(-PI/4.0);
+    translate(0,i);
+    line(-width,0,width,0);
+    popMatrix();
   }
 }

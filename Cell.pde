@@ -3,11 +3,11 @@ public class Cell{
   float w, h;
   int dir;
   float squareness;
-  float partitions = 4;
+  float partitions = round(random(2,4));
   float splitDist;
   String splitMode;
   ArrayList<Cell> offspring = new ArrayList<Cell>();
-  color colour = indigo[round(random(4))];
+  color colour = burgers[round(random(4))];
 
   Cell(PVector a_, PVector b_, PVector c_, PVector d_){
     a = a_;
@@ -26,7 +26,7 @@ public class Cell{
     switch(dispMode){
       case"parent":
         noFill();
-        stroke(#FFFFFF);
+        stroke(#000000);
         strokeWeight(6);
         beginShape();
         vertex(a.x, a.y);
@@ -37,8 +37,8 @@ public class Cell{
         break;
       case"offspring":
         fill(colour);
-        stroke(#FFFFFF);
-        strokeWeight(2);
+        stroke(#000000);
+        strokeWeight(1);
         beginShape();
         vertex(a.x, a.y);
         vertex(b.x, b.y);
