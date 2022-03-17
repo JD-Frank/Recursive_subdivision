@@ -1,5 +1,4 @@
 import processing.pdf.*;
-import processing.svg.*;
 
 int margin = 20;
 int pGenerations = 3;
@@ -8,8 +7,7 @@ int seed = round(random(1000000));
 float hatchSep;
 ArrayList<Cell> cells = new ArrayList<Cell>();
 ArrayList<Cell> offspring = new ArrayList<Cell>();
-
-
+PVector[][] regions;
 
 PVector a,b,c,d,e,f;
 
@@ -31,6 +29,15 @@ void settings(){
   subdivide(oGenerations, offspring, "parent");
 
   println(seed);
+
+  getRegions();
+
+  for(Cell cell : offspring){
+    for(Cell child : cell.offspring){
+      setCellRegion(child);
+    }
+  }
+
 }
 
 void draw(){
@@ -46,8 +53,7 @@ void draw(){
   }
 
   //hatch();
-
-
+  //displayRegions();
 
   noLoop();
   exit();
@@ -116,4 +122,88 @@ void hatch(){
     line(-width,0,width,0);
     popMatrix();
   }
+}
+
+void getRegions(){
+  PVector center = new PVector(width*0.5, height*0.5);
+  PVector p1 = new PVector(margin, margin);
+  PVector p2 = new PVector(margin + (width-2*margin)/3, margin);
+  PVector p3 = new PVector(margin + 2*(width-2*margin)/3, margin);
+  PVector p4 = new PVector(width - margin, margin);
+  PVector p5 = new PVector(width - margin, margin + (height-2*margin)/3);
+  PVector p6 = new PVector(width - margin, margin + 2*(height-2*margin)/3);
+  PVector p7 = new PVector(width - margin, height-margin);
+  PVector p8 = new PVector(margin + 2*(width-2*margin)/3, height-margin);
+  PVector p9 = new PVector(margin + (width-2*margin)/3, height-margin);
+  PVector p10 = new PVector(margin, height-margin);
+  PVector p11 = new PVector(margin, margin + 2*(height-2*margin)/3);
+  PVector p12 = new PVector(margin, margin + (height-2*margin)/3);
+
+  PVector[] r1 = {p9, p10, p11, center};
+  PVector[] r2 = {p11, p12, center};
+  PVector[] r3 = {p1, p2, center, p12};
+  PVector[] r4 = {p2, p3, center};
+  PVector[] r5 = {p3, p4, p5, center};
+  PVector[] r6 = {p5, p6, center};
+  PVector[] r7 = {p6, p7, p8, center};
+  PVector[] r8 = {p8, p9, center};
+
+  PVector[][] regions_ = {r1, r2, r3, r4, r5, r6, r7, r8};
+
+  regions = regions_;
+}
+
+void displayRegions(){
+  for(PVector[] region : regions){
+    beginShape();
+    for(PVector v : region){
+      vertex(v.x, v.y);
+    }
+    endShape();
+  }
+}
+
+int[] getCoords(PVector[] vertices, char axis){
+  int[] coords = new int[vertices.length];
+  for(int i = 0; i < vertices.length; i++){
+    switch(axis){
+      case 'x':
+        coords[i] = (int) vertices[i].x;
+        break;
+      case 'y':
+        coords[i] = (int) vertices[i].y;
+        break;
+    }
+  }
+  return coords;
+}
+
+void setCellRegion(Cell cell){
+  int cx = (int) cell.center.x;
+  int cy = (int) cell.center.y;
+  for(int r = 0; r < regions.length; r++){
+    if(polygonContainsPoint(getCoords(regions[r], 'x'), getCoords(regions[r], 'y'), cx, cy)){
+      cell.setRegion(r+1);
+    }
+  }
+}
+
+public static boolean polygonContainsPoint(int[] polygonXPoints, int[] polygonYPoints, int testX, int testY){
+    int numVerts = polygonXPoints.length;
+    boolean c = false;
+    int j = numVerts - 1;
+    for (int i = 0; i < numVerts; i++)
+    {
+        double deltaX = polygonXPoints[j] - polygonXPoints[i];
+        double ySpread = testY - polygonYPoints[i];
+        double deltaY = polygonYPoints[j] - polygonYPoints[i];
+        if (((polygonYPoints[i] > testY) != (polygonYPoints[j] > testY)) &&
+            (testX < (((deltaX * ySpread) / deltaY) + polygonXPoints[i])))
+        {
+            c = !c;
+        }
+
+        j = i;
+    }
+    return c;
 }

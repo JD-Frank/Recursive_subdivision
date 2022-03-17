@@ -1,7 +1,7 @@
 public class Cell{
-  PVector a, b, c, d, e, f;
+  PVector a, b, c, d, e, f, center;
   float w, h;
-  int dir;
+  int dir, region;
   float squareness;
   float partitions = round(random(2,4));
   float splitDist;
@@ -19,6 +19,7 @@ public class Cell{
     h = abs(PVector.dist(a,d));
     squareness = w/h;
     setDir();
+    getCenter();
   }
 
 // Display a cell according to teh display mode dispMode
@@ -45,6 +46,7 @@ public class Cell{
         vertex(c.x, c.y);
         vertex(d.x, d.y);
         endShape(CLOSE);
+        displayCenter();
         break;
     }
   }
@@ -124,5 +126,21 @@ public class Cell{
       }
       catch(Exception e){}
     }
+  }
+
+  // Get centerpoint of the cell
+  void getCenter(){
+    center = new PVector(a.x+w/2, a.y+h/2);
+  }
+
+  void setRegion(int region_){
+    region = region_;
+  }
+
+  void displayCenter(){
+    fill(#000000);
+    point(center.x, center.y);
+    textSize(10);
+    text(str(region), center.x, center.y);
   }
 }
