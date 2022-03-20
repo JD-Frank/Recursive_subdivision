@@ -1,8 +1,8 @@
 import processing.pdf.*;
 
 int margin = 20;
-int pGenerations = 3;
-int oGenerations = 3;
+int pGenerations = 4;
+int oGenerations = 2;
 int seed = round(random(1000000));
 float hatchSep;
 ArrayList<Cell> cells = new ArrayList<Cell>();
@@ -33,27 +33,29 @@ void settings(){
   getRegions();
 
   for(Cell cell : offspring){
-    for(Cell child : cell.offspring){
-      setCellRegion(child);
-    }
+    setOffspringRegions(cell);
   }
-
 }
 
 void draw(){
 
-  background(#FFFFFF);
+  background(#DDDDDD);
 
+  // displayOffspring("offspring");
+  displayOffspring("windows");
 
+  // for(Cell cell : cells){
+  //  cell.display("parent");
+  // }
 
-  displayOffspring();
+  // PShape xx = loadShape("horizontal1.svg");
+  // shape(xx, 50, 50);
 
-  for(Cell cell : cells){
-   cell.display("parent");
-  }
 
   //hatch();
+  strokeWeight(1);
   //displayRegions();
+
 
   noLoop();
   exit();
@@ -90,14 +92,12 @@ void printCoords(ArrayList<Cell> cellArray){
   }
 }
 
-void  displayOffspring(){
+void  displayOffspring(String dispMode){
   for(Cell cell : offspring){
-    fill(random(255), random(255), random(255), 100);
     int i = offspring.indexOf(cell);
     int dir = cells.get(i).dir;
     int reps = (int) cells.get(i).partitions;
     for(int rep = 0; rep < reps; rep++){
-
       pushMatrix();
       if(dir == 0){
         translate(cell.w*rep, 0);
@@ -105,7 +105,7 @@ void  displayOffspring(){
       if(dir == 1){
         translate(0, cell.h*rep);
       }
-      cell.displayOffspring();
+      cell.displayOffspring(dispMode);
       popMatrix();
     }
   }
@@ -206,4 +206,16 @@ public static boolean polygonContainsPoint(int[] polygonXPoints, int[] polygonYP
         j = i;
     }
     return c;
+}
+
+void setOffspringRegions(Cell parent){
+  for(Cell cell : parent.offspring){
+    setCellRegion(cell);
+    try{
+      setOffspringRegions(cell);
+    }
+    catch(Exception e){
+
+    }
+  }
 }
